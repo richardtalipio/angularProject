@@ -8,6 +8,7 @@ import { ItemService } from '../services/item.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ItemPopupComponent } from '../popups/item-popup/item-popup.component'
+import { DeletePopupComponent } from '../popups/delete-popup/delete-popup.component'
 
 @Component({
   selector: 'app-inventory',
@@ -70,8 +71,23 @@ export class InventoryComponent implements AfterViewInit, OnInit {
     });
   }
 
-  redirectToDelete(id: String) {
+  redirectToDelete(item: any) {
+    const dialogRef = this.dialog.open(DeletePopupComponent);
 
+    dialogRef.afterClosed().subscribe(result => {
+      
+      if (result) {
+
+        this.itemService.deleteItem(item.itemId).subscribe({
+          next: data => {
+            this.dataSource.data = data as ItemData[];
+          },
+          error: error => {
+            console.log(error);
+          }
+        })
+      }
+    });
   }
 
   public doFilter = (value: string) => {

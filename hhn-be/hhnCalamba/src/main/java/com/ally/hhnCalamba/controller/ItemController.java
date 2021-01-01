@@ -58,8 +58,10 @@ public class ItemController {
 	}
 	
 	@DeleteMapping("/deleteItem/{id}")
-	public void delete(@PathVariable Integer id) {
+	public ResponseEntity<List<Item>> delete(@PathVariable Integer id) {
 		itemService.delete(id);
+		return loadItems();
+		
 	}
 	
 }

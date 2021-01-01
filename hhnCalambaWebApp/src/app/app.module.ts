@@ -24,7 +24,8 @@ import { MatSortModule } from '@angular/material/sort';
 import { HttpClientModule } from '@angular/common/http';
 import { ItemPopupComponent } from './popups/item-popup/item-popup.component';
 import { OrderPopupComponent } from './popups/order-popup/order-popup.component';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'; 
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { DeletePopupComponent } from './popups/delete-popup/delete-popup.component'; 
 
 
 
@@ -34,7 +35,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     InventoryComponent,
     OrdersComponent,
     ReportsComponent,  
-    HomeComponent, ItemPopupComponent, OrderPopupComponent
+    HomeComponent, ItemPopupComponent, OrderPopupComponent, DeletePopupComponent
     
   ],
   imports: [

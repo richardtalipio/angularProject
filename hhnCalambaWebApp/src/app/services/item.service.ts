@@ -24,4 +24,9 @@ export class ItemService {
     return  this.http.put<ItemData>('/api/item/updateItem/'+itemid, item);
   }
 
+  deleteItem(itemid: number): any {
+    return this.http.delete<ItemData>('/api/item/deleteItem/'+itemid);
+  }
+
+
 }
