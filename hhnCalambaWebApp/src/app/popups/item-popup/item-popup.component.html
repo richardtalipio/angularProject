@@ -1,0 +1,41 @@
+<h2 *ngIf = "data.itemName == null" mat-dialog-title>Add an Item to Inventory</h2>
+<h2 *ngIf = "data.itemId != null" mat-dialog-title>Edit item details</h2>
+<div class="container" style="width: 600px;">
+    <mat-form-field appearance="standard" >
+        <mat-label>Item Name</mat-label>
+        <input  [(ngModel)]="data.itemName" matInput placeholder="Ex. Hand Sanitizer"/>
+    </mat-form-field><br>
+    <mat-form-field appearance="standard" >
+        <mat-label>Variant</mat-label>
+        <input  [(ngModel)]="data.variant" matInput />
+    </mat-form-field><br>
+    <mat-form-field appearance="standard" >
+        <mat-label>Size</mat-label>
+        <input  [(ngModel)]="data.size" matInput />
+    </mat-form-field><br>
+    <mat-form-field appearance="standard">
+        <mat-label>Item Category</mat-label>
+        <mat-select  [(ngModel)]="data.itemCategory">
+            <mat-option value="Face Care">Face Care</mat-option>
+            <mat-option value="Hair Care">Hair Care</mat-option>
+            <mat-option value="Men's Care">Men's Care</mat-option>
+        </mat-select>
+    </mat-form-field><br>
+    <mat-form-field appearance="standard">
+        <mat-label>Price</mat-label>
+        <input  [(ngModel)]="data.price" matInput class="example-right-align">
+    </mat-form-field><br>
+    <mat-form-field appearance="standard">
+        <mat-label>Stocks left</mat-label>
+        <input  [(ngModel)]="data.stocksLeft" matInput type="number" class="example-right-align">
+    </mat-form-field><br>
+    <mat-form-field appearance="standard">
+        <mat-label>Dealer's Discount (in %)</mat-label>
+        <input  [(ngModel)]="data.dealersDiscount" matInput class="example-right-align">
+    </mat-form-field>
+      
+</div>
+<mat-dialog-actions align="end">
+    <button mat-button [mat-dialog-close]="false">Cancel</button>
+    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Confirm</button>
+</mat-dialog-actions>
