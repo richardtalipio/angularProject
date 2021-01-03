@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.ally.hhnCalamba.model.Item;
 import com.ally.hhnCalamba.repository.ItemRepository;
+import org.json.simple.JSONObject;
 
 @Service
 public class ItemService {
@@ -23,17 +24,27 @@ public class ItemService {
 		return itemList;
 	}
 
-	public List<Item> getItemsWithParam(Integer pageNumber, Integer pageSize, String order) {
+	public JSONObject getItemsWithParam(Integer pageNumber, String sortColumn, String order, Integer pageSize, String filter) {
 
 		Sort sort;
 		if (order.equalsIgnoreCase("ASC")) {
-			sort = Sort.by("itemName").ascending();
+			sort = Sort.by(sortColumn).ascending();
 		} else {
-			sort = Sort.by("itemName").descending();
+			sort = Sort.by(sortColumn).descending();
 		}
 		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
-		List<Item> itemList = itemRepository.findAll(pageable).getContent();
-		return itemList;
+		List<Item> itemList = itemRepository.findByItemName(filter, pageable).getContent();
+		int itemCount;
+		if(filter.isBlank() || filter.isEmpty()) {
+			itemCount = getAllItems().size();
+		}else {
+			itemCount = itemRepository.findByItemName(filter).size();
+		}
+		
+		JSONObject json = new JSONObject();
+		json.put("itemList", itemList);
+		json.put("itemCount", itemCount);
+		return json;
 	}
 
 	public void save(Item item) {

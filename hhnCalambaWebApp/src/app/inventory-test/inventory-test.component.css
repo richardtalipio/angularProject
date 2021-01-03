@@ -1,0 +1,23 @@
+table {
+    width: 100%;
+  }
+    
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+    
+  td, th {
+    width: 25%;
+  }
+  
+  .mat-column-itemId, .mat-column-price, .mat-column-stocksLeft, .mat-column-size{
+    width: 10% !important;
+  }
+
+
+
+  .mat-column-dealersDiscount, .mat-column-variant{
+    width: 15% !important;
+  }
+  

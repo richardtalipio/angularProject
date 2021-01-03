@@ -3,6 +3,7 @@ package com.ally.hhnCalamba.controller;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,46 +23,45 @@ import com.ally.hhnCalamba.sevice.ItemService;
 @RestController
 @RequestMapping("/item")
 public class ItemController {
-	
+
 	@Autowired
 	ItemService itemService;
-	
-	@GetMapping("/loadItemsInPage")
-	public ResponseEntity<List<Item>> loadItemsInPage(
-			 @RequestParam(defaultValue = "0") Integer pageNumber, 
-             @RequestParam(defaultValue = "10") Integer pageSize,
-             @RequestParam(defaultValue = "asc") String order) {
-		List<Item> itemList = itemService.getItemsWithParam(pageNumber, pageSize, order);
-	    return new ResponseEntity<List<Item>>(itemList, new HttpHeaders(), HttpStatus.OK);
+
+	@GetMapping("/loadItemswithParam")
+	public ResponseEntity<JSONObject> loadItemswithParam(@RequestParam(defaultValue = "0") Integer page,
+			@RequestParam(defaultValue = "itemName") String sort, @RequestParam(defaultValue = "asc") String order,
+			@RequestParam(defaultValue = "5") Integer pageSize,  @RequestParam(defaultValue = "") String filter) {
+		JSONObject response = itemService.getItemsWithParam(page, sort, order, pageSize, filter);
+		return new ResponseEntity<JSONObject>(response, new HttpHeaders(), HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/loadItems")
 	public ResponseEntity<List<Item>> loadItems() {
 		List<Item> itemList = itemService.getAllItems();
 		return new ResponseEntity<List<Item>>(itemList, new HttpHeaders(), HttpStatus.OK);
 	}
-	
+
 	@PostMapping("/addItem")
 	public void addItem(@RequestBody Item item) {
 		itemService.save(item);
 	}
-	
+
 	@PutMapping("/updateItem/{id}")
 	public ResponseEntity<?> update(@RequestBody Item item, @PathVariable Integer id) {
-	    try {
-	        item.setItemId(id);  
-	        itemService.save(item);
-	        return new ResponseEntity<>(HttpStatus.OK);
-	    } catch (NoSuchElementException e) {
-	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	    }      
+		try {
+			item.setItemId(id);
+			itemService.save(item);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (NoSuchElementException e) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
-	
+
 	@DeleteMapping("/deleteItem/{id}")
 	public ResponseEntity<List<Item>> delete(@PathVariable Integer id) {
 		itemService.delete(id);
 		return loadItems();
-		
+
 	}
-	
+
 }

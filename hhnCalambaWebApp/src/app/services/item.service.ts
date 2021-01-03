@@ -28,5 +28,9 @@ export class ItemService {
     return this.http.delete<ItemData>('/api/item/deleteItem/'+itemid);
   }
 
+  loadItemswithParam(sort: string, order: string, page: number, pageSize: number, filter: string): Observable<any>{
+    return  this.http.get<any>('/api/item/loadItemswithParam?sort='+sort+'&order='+order+'&page='+page+'&pageSize='+pageSize+'&filter='+filter);
+  }
+
 
 }
