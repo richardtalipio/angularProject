@@ -40,7 +40,6 @@ public class ItemService {
 		}else {
 			itemCount = itemRepository.findByItemName(filter).size();
 		}
-		
 		JSONObject json = new JSONObject();
 		json.put("itemList", itemList);
 		json.put("itemCount", itemCount);

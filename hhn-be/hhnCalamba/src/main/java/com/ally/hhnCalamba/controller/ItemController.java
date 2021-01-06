@@ -42,25 +42,30 @@ public class ItemController {
 	}
 
 	@PostMapping("/addItem")
-	public void addItem(@RequestBody Item item) {
+	public ResponseEntity<JSONObject> addItem(@RequestBody Item item) {
 		itemService.save(item);
+		return loadItemswithParam(0, "itemName", "asc", 5, "");
 	}
 
 	@PutMapping("/updateItem/{id}")
-	public ResponseEntity<?> update(@RequestBody Item item, @PathVariable Integer id) {
+	public ResponseEntity<JSONObject> update(@RequestBody Item item, @PathVariable Integer id) {
 		try {
 			item.setItemId(id);
 			itemService.save(item);
-			return new ResponseEntity<>(HttpStatus.OK);
+			return loadItemswithParam(0, "itemName", "asc", 5, "");
 		} catch (NoSuchElementException e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
 
 	@DeleteMapping("/deleteItem/{id}")
-	public ResponseEntity<List<Item>> delete(@PathVariable Integer id) {
-		itemService.delete(id);
-		return loadItems();
+	public ResponseEntity<JSONObject> delete(@PathVariable Integer id) {
+		try {
+			itemService.delete(id);
+			return loadItemswithParam(0, "itemName", "asc", 5, "");
+		} catch (NoSuchElementException e) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 
 	}
 

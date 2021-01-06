@@ -26,7 +26,6 @@ import { ItemPopupComponent } from './popups/item-popup/item-popup.component';
 import { OrderPopupComponent } from './popups/order-popup/order-popup.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DeletePopupComponent } from './popups/delete-popup/delete-popup.component';
-import { InventoryTestComponent } from './inventory-test/inventory-test.component'; 
 
 
 
@@ -36,7 +35,7 @@ import { InventoryTestComponent } from './inventory-test/inventory-test.componen
     InventoryComponent,
     OrdersComponent,
     ReportsComponent,  
-    HomeComponent, ItemPopupComponent, OrderPopupComponent, DeletePopupComponent, InventoryTestComponent
+    HomeComponent, ItemPopupComponent, OrderPopupComponent, DeletePopupComponent
     
   ],
   imports: [

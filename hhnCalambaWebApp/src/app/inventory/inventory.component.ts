@@ -2,13 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Component, ViewChild, AfterViewInit, OnInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { shareReplay } from 'rxjs/operators';
+import { merge, Observable, of as observableOf, Subscription } from 'rxjs';
+import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 import { ItemData } from '../models/item-data';
 import { ItemService } from '../services/item.service';
-import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { ItemPopupComponent } from '../popups/item-popup/item-popup.component'
-import { DeletePopupComponent } from '../popups/delete-popup/delete-popup.component'
+import { ItemPopupComponent } from '../popups/item-popup/item-popup.component';
+import { DeletePopupComponent } from '../popups/delete-popup/delete-popup.component';
 
 @Component({
   selector: 'app-inventory',
@@ -16,39 +16,77 @@ import { DeletePopupComponent } from '../popups/delete-popup/delete-popup.compon
   styleUrls: ['./inventory.component.css']
 })
 export class InventoryComponent implements AfterViewInit, OnInit {
-  displayedColumns: string[] = ['itemName', 'variant', 'size', 'itemCategory', 'price', 'stocksLeft', 'dealersDiscount', 'delete'];
 
-  public dataSource = new MatTableDataSource<ItemData>();
+  displayedColumns: string[] = ['itemName', 'variant', 'size', 'itemCategory', 'price', 'stocksLeft', 'dealersDiscount', 'delete'];
+  dataSource: ItemData[] = [];
+
   resultsLength = 0;
   isLoadingResults = true;
   isRateLimitReached = false;
-  itemData: ItemData;
-  getAllItems$ = this.itemService.loadItems().pipe(shareReplay(5));
+
+  filter = "";
+  
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(private itemService: ItemService, public dialog: MatDialog) { }
 
-  public getAllItems = () => {
-    this.getAllItems$.subscribe(data => {
-      this.isLoadingResults = false;
-      this.dataSource.data = data as ItemData[];
-      console.log(data)
-    });
-  }
-
   ngOnInit() {
-    this.isLoadingResults = true;
-    this.getAllItems();
+
+  }
+  ngAfterViewInit() {
+    this.loadTable();
   }
 
-  ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+  doFilter(value: string) {
+    this.filter = value.trim();
+    
+    this.itemService.loadItemswithParam(
+      this.sort.active, this.sort.direction, 0, this.paginator.pageSize, this.filter)
+      .subscribe(data => {
+        this.dataSource = data.itemList;
+        this.resultsLength = data.itemCount;
+        this.paginator.pageIndex = 0;
+        this.isLoadingResults = false;
+        this.isRateLimitReached = false;
+        
+      });
+  }
+
+  loadTable() {
+    merge(this.sort.sortChange, this.paginator.page)
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          this.isLoadingResults = true;
+          return this.itemService.loadItemswithParam(
+            this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize, this.filter);
+        }),
+        map(data => {
+          // Flip flag to show that loading has finished.
+          this.isLoadingResults = false;
+          this.isRateLimitReached = false;
+          this.resultsLength = data.itemCount;
+
+          return data.itemList;
+        }),
+        catchError(() => {
+          this.isLoadingResults = false;
+          // Catch if the GitHub API has reached its rate limit. Return empty data.
+          this.isRateLimitReached = true;
+          return observableOf([]);
+        })
+      ).subscribe(data => {
+        this.dataSource = data;
+        this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+      });
+
+
   }
 
   toggleNewItemEvent() {
+    
     const dialogRef = this.dialog.open(ItemPopupComponent, {
       data: new ItemData
     });
@@ -56,12 +94,40 @@ export class InventoryComponent implements AfterViewInit, OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);
       if (result) {
-        this.dataSource.data.push(result);
-        this.dataSource.data = this.dataSource.data;
+        this.isLoadingResults = true;
+        this.itemService.addItem(result).subscribe(data => {
+          this.dataSource = data.itemList;
+          this.resultsLength = data.itemCount;
+          this.paginator.pageIndex = 0;
+          this.paginator.pageSize = 5;
+          this.sort.active = "itemName";
+          this.sort.direction = "asc";
+          this.isLoadingResults = false;
+          this.isRateLimitReached = false;
+        });
+      }
+    });
+  }
 
-        this.itemService.addItem(result).subscribe({
+  getRecord(row: ItemData) {
+    const dialogRef = this.dialog.open(ItemPopupComponent, {
+      data: row
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      if (result) {
+        this.isLoadingResults = true;
+        this.itemService.addorUpdateItem(result, result.itemId).subscribe({
           next: data => {
-            console.log("Added Successfully");
+            this.dataSource = data.itemList;
+            this.resultsLength = data.itemCount;
+            this.paginator.pageIndex = 0;
+            this.paginator.pageSize = 5;
+            this.sort.active = "itemName";
+            this.sort.direction = "asc";
+            this.isLoadingResults = false;
+            this.isRateLimitReached = false;
           },
           error: error => {
             console.log(error);
@@ -80,7 +146,15 @@ export class InventoryComponent implements AfterViewInit, OnInit {
 
         this.itemService.deleteItem(item.itemId).subscribe({
           next: data => {
-            this.dataSource.data = data as ItemData[];
+            this.dataSource = data.itemList;
+            this.resultsLength = data.itemCount;
+            this.paginator.pageIndex = 0;
+            this.paginator.pageSize = 5;
+            this.sort.active = "itemName";
+            this.sort.direction = "asc";
+            this.isLoadingResults = false;
+            this.isRateLimitReached = false;
+            this.filter = "";
           },
           error: error => {
             console.log(error);
@@ -90,31 +164,4 @@ export class InventoryComponent implements AfterViewInit, OnInit {
     });
   }
 
-  public doFilter = (value: string) => {
-    this.dataSource.filter = value.trim().toLocaleLowerCase();
-  }
-
-  getRecord(row: ItemData) {
-    const dialogRef = this.dialog.open(ItemPopupComponent, {
-      data: row
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
-      if (result) {
-        this.dataSource.data = this.dataSource.data;
-
-        this.itemService.addorUpdateItem(result, result.itemId).subscribe({
-          next: data => {
-            console.log("Added Successfully");
-          },
-          error: error => {
-            console.log(error);
-          }
-        })
-      }
-    });
-  }
-
-  
 }
