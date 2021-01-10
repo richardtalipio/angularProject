@@ -1,12 +1,11 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, ViewChild, AfterViewInit, OnInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { merge, Observable, of as observableOf, Subscription } from 'rxjs';
+import { merge, of as observableOf } from 'rxjs';
 import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 import { ItemData } from '../models/item-data';
 import { ItemService } from '../services/item.service';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { ItemPopupComponent } from '../popups/item-popup/item-popup.component';
 import { DeletePopupComponent } from '../popups/delete-popup/delete-popup.component';
 
@@ -17,7 +16,7 @@ import { DeletePopupComponent } from '../popups/delete-popup/delete-popup.compon
 })
 export class InventoryComponent implements AfterViewInit, OnInit {
 
-  displayedColumns: string[] = ['itemName', 'variant', 'size', 'itemCategory', 'price', 'stocksLeft', 'dealersDiscount', 'delete'];
+  displayedColumns: string[] = ['itemName', 'itemCategory', 'price', 'stocksLeft', 'dealersDiscount', 'delete'];
   dataSource: ItemData[] = [];
 
   resultsLength = 0;
