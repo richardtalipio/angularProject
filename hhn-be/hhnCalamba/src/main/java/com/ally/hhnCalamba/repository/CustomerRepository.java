@@ -16,6 +16,9 @@ import com.ally.hhnCalamba.model.Item;
 public interface CustomerRepository extends JpaRepository<Customer, Integer>{
 
 	@Query("SELECT C FROM Customer C WHERE C.customerName LIKE %:customerName% ")
-	Page<Item> findByItemName(@Param("customerName") String customerName, Pageable pageable);
+	Page<Customer> findByCustomerName(@Param("customerName") String customerName, Pageable pageable);
+	
+	@Query("SELECT C FROM Customer C WHERE C.customerName LIKE %:customerName% ")
+	List<Customer> findByCustomerName(@Param("customerName") String customerName);
 	
 }

@@ -15,8 +15,8 @@ export class CustomerService {
     return  this.http.get<any>('/api/customer/loadCustomerTableData');
   }
 
-  loadCustomerswithParam(sort: string, order: string, page: number, pageSize: number, filter: string): Observable<any>{
-    return  this.http.get<any>('/api/item/loadCustomerswithParam?sort='+sort+'&order='+order+'&page='+page+'&pageSize='+pageSize+'&filter='+filter);
+  loadCustomersWithParam(sort: string, order: string, page: number, pageSize: number, filter: string): Observable<any>{
+    return  this.http.get<any>('/api/customer/loadCustomersWithParam?sort='+sort+'&order='+order+'&page='+page+'&pageSize='+pageSize+'&filter='+filter);
   }
 
 }

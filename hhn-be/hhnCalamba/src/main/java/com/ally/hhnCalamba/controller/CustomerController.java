@@ -34,11 +34,12 @@ public class CustomerController {
 		return new ResponseEntity<JSONObject>(jsonResponse, new HttpHeaders(), HttpStatus.OK);
 	}
 	
-	@GetMapping("/loadCustomerswithParam")
-	public ResponseEntity<JSONObject> loadCustomerswithParam(@RequestParam(defaultValue = "0") Integer page,
-			@RequestParam(defaultValue = "itemName") String sort, @RequestParam(defaultValue = "asc") String order,
+	@GetMapping("/loadCustomersWithParam")
+	public ResponseEntity<JSONObject> loadCustomersWithParam(@RequestParam(defaultValue = "0") Integer page,
+			@RequestParam(defaultValue = "customerName") String sort, @RequestParam(defaultValue = "asc") String order,
 			@RequestParam(defaultValue = "5") Integer pageSize,  @RequestParam(defaultValue = "") String filter) {
 		JSONObject response = customerService.getCustomersWithParam(page, sort, order, pageSize, filter);
+		System.out.println(response);
 		return new ResponseEntity<JSONObject>(response, new HttpHeaders(), HttpStatus.OK);
 	}
 }

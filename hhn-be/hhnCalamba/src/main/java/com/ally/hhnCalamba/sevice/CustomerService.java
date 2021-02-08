@@ -44,7 +44,7 @@ public class CustomerService {
 		
 	}
 	
-	public JSONObject getItemsWithParam(Integer pageNumber, String sortColumn, String order, Integer pageSize, String filter) {
+	public JSONObject getCustomersWithParam(Integer pageNumber, String sortColumn, String order, Integer pageSize, String filter) {
 
 		Sort sort;
 		if (order.equalsIgnoreCase("ASC")) {
@@ -53,16 +53,16 @@ public class CustomerService {
 			sort = Sort.by(sortColumn).descending();
 		}
 		Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
-		List<Item> itemList = itemRepository.findByItemName(filter, pageable).getContent();
-		int itemCount;
+		List<Customer> customerList = customerRepository.findByCustomerName(filter, pageable).getContent();
+		int customerCount;
 		if(filter.isBlank() || filter.isEmpty()) {
-			itemCount = getAllItems().size();
+			customerCount = getAllCustomers().size();
 		}else {
-			itemCount = itemRepository.findByItemName(filter).size();
+			customerCount = customerRepository.findByCustomerName(filter).size();
 		}
 		JSONObject json = new JSONObject();
-		json.put("itemList", itemList);
-		json.put("itemCount", itemCount);
+		json.put("customerList", customerList);
+		json.put("customerCount", customerCount);
 		return json;
 	}
 	
