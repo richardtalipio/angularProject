@@ -28,7 +28,7 @@ export class OrdersComponent implements OnInit, AfterViewInit {
   loadTable() {
     this.customerService.loadCustomers().subscribe(result =>{
       console.log(result)
-      this.dataSource = result;
+      this.dataSource = result.customerList;
     })
   }
 }
