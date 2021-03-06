@@ -11,10 +11,13 @@ table {
     width: 25%;
   }
   
-  .mat-column-itemId, .mat-column-price, .mat-column-stocksLeft, .mat-column-size{
+  .mat-column-itemId, .mat-column-price, .mat-column-stocksLeft, .mat-column-size, .mat-column-itemCategory{
     width: 10% !important;
   }
 
+  .mat-column-itemName{
+    width: 40%;
+  }
 
 
   .mat-column-dealersDiscount, .mat-column-variant{

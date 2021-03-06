@@ -10,11 +10,11 @@ import { ItemPopupComponent } from '../popups/item-popup/item-popup.component';
 import { DeletePopupComponent } from '../popups/delete-popup/delete-popup.component';
 
 @Component({
-  selector: 'app-inventory',
-  templateUrl: './inventory.component.html',
-  styleUrls: ['./inventory.component.css']
+  selector: 'app-items',
+  templateUrl: './items.component.html',
+  styleUrls: ['./items.component.css']
 })
-export class InventoryComponent implements AfterViewInit, OnInit {
+export class ItemsComponent implements AfterViewInit, OnInit {
 
   displayedColumns: string[] = ['itemName', 'itemCategory', 'price', 'stocksLeft', 'dealersDiscount', 'delete'];
   dataSource: ItemData[] = [];

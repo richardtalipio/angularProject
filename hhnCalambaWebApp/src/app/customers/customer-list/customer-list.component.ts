@@ -1,18 +1,18 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { CustomerData } from '../models/customer-data';
-import { CustomerTableData } from '../models/customer-table-data';
-import { CustomerService } from '../services/customer.service';
+import { CustomerData } from '../../models/customer-data'
+import { CustomerTableData } from '../../models/customer-table-data';
+import { CustomerService } from '../../services/customer.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { merge, of as observableOf } from 'rxjs';
 import { catchError, map, startWith, switchMap } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-orders',
-  templateUrl: './orders.component.html',
-  styleUrls: ['./orders.component.css']
+  selector: 'app-customer-list',
+  templateUrl: './customer-list.component.html',
+  styleUrls: ['./customer-list.component.css']
 })
-export class OrdersComponent implements OnInit, AfterViewInit {
+export class CustomerListComponent implements OnInit, AfterViewInit {
 
   displayedColumns: string[] = ['customerName', 'remarks', 'latestDeliveryDate', 'delete'];
   dataSource: CustomerData[] = [];
@@ -78,4 +78,5 @@ export class OrdersComponent implements OnInit, AfterViewInit {
         
       });
   }
+
 }
