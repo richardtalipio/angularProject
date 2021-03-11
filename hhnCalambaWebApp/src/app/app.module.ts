@@ -26,6 +26,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DeletePopupComponent } from './popups/delete-popup/delete-popup.component';
 import { ItemsComponent } from './items/items.component';
 import { CommonModule } from '@angular/common';
+import { NewCustomerComponent } from './popups/new-customer/new-customer.component';
 
 
 
@@ -35,7 +36,7 @@ import { CommonModule } from '@angular/common';
     AppComponent,
     ItemsComponent,
     ReportsComponent,  
-    HomeComponent, ItemPopupComponent, DeletePopupComponent
+    HomeComponent, ItemPopupComponent, DeletePopupComponent, NewCustomerComponent
     
   ],
   imports: [

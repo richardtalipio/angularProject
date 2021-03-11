@@ -66,5 +66,13 @@ public class CustomerService {
 		return json;
 	}
 	
+	public JSONObject save(Customer customer) {
+		Integer customerId = customerRepository.save(customer).getCustomerId();
+		JSONObject json = new JSONObject();
+		json.put("customerId", customerId);
+		return json;
+	
+	}
+	
 	
 }

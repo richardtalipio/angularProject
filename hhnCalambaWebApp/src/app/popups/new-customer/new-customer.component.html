@@ -1,0 +1,19 @@
+<div class="container" style="width: 600px;">
+    <mat-form-field appearance="standard" >
+        <mat-label>Customer Name</mat-label>
+        <input [(ngModel)]="data.customerName" matInput />
+    </mat-form-field><br>
+    <mat-form-field appearance="standard" >
+        <mat-label>Mobile Number</mat-label>
+        <input   [(ngModel)]="data.mobileNumber"  matInput />
+    </mat-form-field><br>
+    <mat-form-field appearance="standard" >
+        <mat-label>Remarks</mat-label>
+        <input   [(ngModel)]="data.remarks"  matInput />
+    </mat-form-field><br>
+</div>
+
+<mat-dialog-actions align="end">
+    <button mat-button [mat-dialog-close]="false">Cancel</button>
+    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Add</button>
+</mat-dialog-actions>

@@ -1,11 +1,13 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { CustomerData } from '../../models/customer-data'
-import { CustomerTableData } from '../../models/customer-table-data';
 import { CustomerService } from '../../services/customer.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { merge, of as observableOf } from 'rxjs';
 import { catchError, map, startWith, switchMap } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { NewCustomerComponent } from 'src/app/popups/new-customer/new-customer.component';
 
 @Component({
   selector: 'app-customer-list',
@@ -26,7 +28,9 @@ export class CustomerListComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private customerService: CustomerService) { }
+  constructor(private customerService: CustomerService,
+    private router: Router,
+    public dialog: MatDialog) { }
 
   ngOnInit(): void {
 
@@ -77,6 +81,29 @@ export class CustomerListComponent implements OnInit, AfterViewInit {
         this.isRateLimitReached = false;
         
       });
+  }
+
+  getCustomerDetails(row: CustomerData){
+    this.router.navigate(['customers/details',  row.customerId]);
+  }
+
+  toggleNewCustomer(){
+    const dialogRef = this.dialog.open(NewCustomerComponent, {
+      data: new CustomerData
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+
+      if(result){
+        this.isLoadingResults = true;
+        this.customerService.addCustomer(result).subscribe( data => {
+          this.isLoadingResults = false;
+          this.router.navigate(['customers/details',  data.customerId]);
+        });
+      }
+
+
+    });
   }
 
 }

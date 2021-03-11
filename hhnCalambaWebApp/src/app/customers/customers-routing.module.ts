@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { CustomerDetailsComponent } from './customer-details/customer-details.component';
 import { CustomerListComponent } from './customer-list/customer-list.component';
 import { CustomersComponent } from './customers.component';
+import { NewCustomerComponent } from '../popups/new-customer/new-customer.component';
 import { OrderDetailsComponent } from './order-details/order-details.component';
 
 
@@ -11,7 +12,7 @@ const customerRoutes: Routes = [
     {
         path: '', component: CustomersComponent, children: [
             { path: 'list', component: CustomerListComponent },
-            { path: 'details', component: CustomerDetailsComponent },
+            { path: 'details/:customerId', component: CustomerDetailsComponent },
             { path: 'order-details', component: OrderDetailsComponent },
             { path: '', redirectTo: 'list', pathMatch: 'full' },
         ]

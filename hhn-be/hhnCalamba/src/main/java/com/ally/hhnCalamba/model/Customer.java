@@ -30,6 +30,9 @@ public class Customer {
 	@Column(name = "latest_delivery_date")
 	private String latestDeliveryDate;
 	
+	@Column(name = "mobile_number")
+	private String mobileNumber;
+	
 	@OneToMany(mappedBy="customer")
     private Set<Order> orders;
 
@@ -47,6 +50,14 @@ public class Customer {
 
 	public void setCustomerName(String customerName) {
 		this.customerName = customerName;
+	}
+
+	public String getMobileNumber() {
+		return mobileNumber;
+	}
+
+	public void setMobileNumber(String mobileNumber) {
+		this.mobileNumber = mobileNumber;
 	}
 
 	public String getRemarks() {
